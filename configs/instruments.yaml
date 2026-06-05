@@ -1,0 +1,21 @@
+# Initial monitored universe for development and smoke tests.
+# Full universe discovery is Step 2; this file seeds Step 1 bootstrap.
+
+underlyings:
+  - symbol: SPY
+    sec_type: STK
+    exchange: SMART
+    currency: USD
+    description: "SPDR S&P 500 ETF — liquid benchmark for connectivity tests"
+  - symbol: QQQ
+    sec_type: STK
+    exchange: SMART
+    currency: USD
+    description: "Invesco QQQ — secondary liquid benchmark"
+
+client_id_convention:
+  connectivity_bootstrap: 10
+  collector_service: 1
+  analytics_service: 2
+  replay_service: 3
+  # Never run two services with the same client_id on the same Gateway session.

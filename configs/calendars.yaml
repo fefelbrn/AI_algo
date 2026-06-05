@@ -1,0 +1,12 @@
+# Trading session conventions (US equities baseline).
+calendar:
+  timezone: "America/New_York"
+  regular_session:
+    open: "09:30"
+    close: "16:00"
+  extended_session:
+    pre_market_open: "04:00"
+    after_hours_close: "20:00"
+
+holidays_source: "manual"   # upgrade to exchange calendar feed in later steps
+day_count_convention: "ACT/365"

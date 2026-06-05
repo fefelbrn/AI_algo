@@ -1,0 +1,22 @@
+environment: dev
+
+ibkr:
+  host: "127.0.0.1"
+  port: 4002          # IB Gateway paper trading (TWS paper: 7497, live Gateway: 4001)
+  client_id: 10       # bootstrap / smoke-test — see docs/environment.md for convention
+  timeout_seconds: 30
+  readonly: true      # no orders in Step 1
+
+paths:
+  logs_dir: "logs"
+  artifacts_dir: "artifacts"
+
+health:
+  max_clock_skew_seconds: 5.0
+  heartbeat_interval_seconds: 10
+
+bootstrap:
+  smoke_underlying: "SPY"
+  smoke_exchange: "SMART"
+  smoke_currency: "USD"
+  output_subdir: "bootstrap"

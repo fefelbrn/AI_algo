@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# Artifacts & logs
+artifacts/
+logs/
+*.log
+
+# IDE
+.idea/
+.vscode/
+.DS_Store
+
+# Lock files (optional — keep requirements.txt as source of truth)
+# requirements.lock

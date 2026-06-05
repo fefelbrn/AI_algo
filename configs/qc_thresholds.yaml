@@ -1,0 +1,22 @@
+# QC thresholds — used from Step 7 onward; defined here for config versioning.
+version: "qc_v0.1.0"
+
+underlying:
+  max_spread_pct: 0.5
+  max_stale_seconds: 30
+
+options:
+  max_spread_pct: 5.0
+  max_stale_seconds: 60
+  min_bid: 0.01
+
+forward:
+  max_parity_residual: 0.05
+  min_candidate_strikes: 2
+
+iv_solver:
+  min_convergence_ratio: 0.97
+  max_residual: 1.0e-4
+
+surface:
+  max_fit_rmse: 0.02

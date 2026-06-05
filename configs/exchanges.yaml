@@ -1,0 +1,15 @@
+# Exchange and routing conventions for the monitored universe.
+exchanges:
+  - code: SMART
+    description: "IB smart routing — default for US equities and options"
+    default: true
+  - code: ARCA
+    description: "NYSE Arca — common listing for ETFs like SPY"
+  - code: CBOE
+    description: "CBOE — index options"
+  - code: NASDAQ
+    description: "NASDAQ listed equities"
+
+routing:
+  default_exchange: SMART
+  primary_currency: USD

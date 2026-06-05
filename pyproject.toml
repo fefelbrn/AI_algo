@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vol-infra"
+version = "0.1.0"
+description = "IBKR-based volatility infrastructure — Step 1 connectivity foundation"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "ib-insync>=0.9.86",
+    "pyyaml>=6.0.2",
+    "python-dotenv>=1.0.1",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+]
+
+[project.scripts]
+vol-bootstrap = "scripts.bootstrap_connectivity:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src", "src.*", "scripts", "scripts.*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
