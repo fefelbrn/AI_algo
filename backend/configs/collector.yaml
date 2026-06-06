@@ -1,0 +1,87 @@
+# Step 3 — market-data collector (snapshot mode, option C universe)
+version: "collector_v0.1.0"
+
+snapshot:
+  interval_seconds: 300       # 5 minutes
+  quote_wait_seconds: 2.0       # wait after reqMktData before reading
+  max_duration_seconds: null    # null = run until Ctrl+C; set e.g. 600 for test
+
+storage:
+  subdir: "raw_market_events"
+  flush_every_snapshots: 1      # write parquet after each snapshot cycle
+
+# Canonical future/option tenor buckets (prof whiteboard)
+tenors:
+  - { label: "10d",  days: 10 }
+  - { label: "1m",   days: 30 }
+  - { label: "3m",   days: 90 }
+  - { label: "6m",   days: 180 }
+  - { label: "9m",   days: 270 }
+  - { label: "12m",  days: 365 }
+  - { label: "18m",  days: 548 }
+  - { label: "24m",  days: 730 }
+  - { label: "36m",  days: 1095 }
+
+# Option C — index + futures + ATM subset (±30δ proxy via moneyness bands)
+options_subset:
+  moneyness_bands: [0.90, 1.00, 1.10]   # OTM put / ATM / OTM call proxy
+  include_calls: true
+  include_puts: true
+  max_expiries_per_tenor: 1               # closest expiry to each tenor bucket
+
+products:
+  - name: sp500
+    description: "S&P 500 — US"
+    index:
+      symbol: SPX
+      sec_type: IND
+      exchange: CBOE
+      currency: USD
+      fallback:
+        symbol: SPY
+        sec_type: STK
+        exchange: SMART
+        currency: USD
+    futures:
+      symbol: ES
+      sec_type: FUT
+      exchange: GLOBEX
+      currency: USD
+    options:
+      symbol: SPX
+      sec_type: OPT
+      exchange: SMART
+      currency: USD
+      fallback:
+        symbol: SPY
+        sec_type: OPT
+        exchange: SMART
+        currency: USD
+
+  - name: eurostoxx50
+    description: "Euro Stoxx 50 — EU"
+    index:
+      symbol: ESTX50
+      sec_type: IND
+      exchange: EUREX
+      currency: EUR
+      fallback:
+        symbol: FEZ
+        sec_type: STK
+        exchange: SMART
+        currency: USD
+    futures:
+      symbol: FESX
+      sec_type: FUT
+      exchange: EUREX
+      currency: EUR
+    options:
+      symbol: ESTX50
+      sec_type: OPT
+      exchange: EUREX
+      currency: EUR
+      fallback:
+        symbol: FEZ
+        sec_type: OPT
+        exchange: SMART
+        currency: USD

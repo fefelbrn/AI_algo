@@ -10,9 +10,9 @@ import logging
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+from _paths import BACKEND_ROOT, REPO_ROOT, setup_import_path
+
+setup_import_path()
 
 from src.connectivity.adapter import IBKRAdapter
 from src.connectivity.config import ibkr_secrets_from_config, load_config
@@ -38,7 +38,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--config",
         type=Path,
-        default=PROJECT_ROOT / "configs" / "dev.yaml",
+        default=BACKEND_ROOT / "configs" / "dev.yaml",
         help="Environment config YAML",
     )
     parser.add_argument(
@@ -55,14 +55,17 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    config = load_config(args.config, project_root=PROJECT_ROOT)
+    config = load_config(args.config, repo_root_path=REPO_ROOT)
     _setup_logging(config.paths.logs_dir)
     logger = logging.getLogger("discover_universe")
 
     session_date = (
         dt.date.fromisoformat(args.session_date) if args.session_date else dt.date.today()
     )
-    secrets = load_secrets(defaults=ibkr_secrets_from_config(config))
+    secrets = load_secrets(
+        env_file=REPO_ROOT / ".env",
+        defaults=ibkr_secrets_from_config(config),
+    )
     secrets = type(secrets)(host=secrets.host, port=secrets.port, client_id=args.client_id)
 
     master = InstrumentMaster.from_config(config.config_dir, config.paths.artifacts_dir)

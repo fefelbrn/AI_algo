@@ -17,7 +17,7 @@ Guide de mise en place pour la connectivité IBKR (roadmap Step 1).
 | Live | IB Gateway | 4001 |
 | Live | TWS | 7496 |
 
-Le fichier `configs/dev.yaml` utilise le port **4002** (Gateway paper).
+Le fichier `backend/configs/dev.yaml` utilise le port **4002** (Gateway paper).
 
 ## Installation
 
@@ -29,8 +29,8 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Installer les dépendances
-pip install -e ".[dev]"
-# ou : pip install -r requirements.txt
+pip install -e "backend/[dev]"
+# ou : pip install -r backend/requirements.txt
 ```
 
 ## Configuration IB Gateway / TWS
@@ -61,10 +61,10 @@ cp .env.example .env
 
 | Service | client_id | Fichier |
 |---------|-----------|---------|
-| Collector (Step 3) | 1 | `configs/instruments.yaml` |
+| Collector (Step 3) | 1 | `backend/configs/instruments.yaml` |
 | Analytics (futur) | 2 | idem |
 | Replay (futur) | 3 | idem |
-| Bootstrap / smoke test | 10 | `configs/dev.yaml` |
+| Bootstrap / smoke test | 10 | `backend/configs/dev.yaml` |
 
 **Ne jamais lancer deux services avec le même `client_id` sur la même session Gateway.**
 
@@ -72,7 +72,7 @@ cp .env.example .env
 
 ```bash
 source .venv/bin/activate
-python scripts/bootstrap_connectivity.py
+python processes/scripts/bootstrap_connectivity.py
 ```
 
 Le script doit afficher :
@@ -81,7 +81,7 @@ Le script doit afficher :
 - la résolution du contrat SPY
 - un quote bid/ask/last
 - les health checks
-- le chemin du fichier JSONL écrit dans `artifacts/bootstrap/`
+- le chemin du fichier JSONL écrit dans `processes/artifacts/bootstrap/`
 
 Code de sortie :
 - `0` — succès (ou warnings si marché fermé)
@@ -99,10 +99,10 @@ Code de sortie :
 ## Arborescence des logs et artifacts
 
 ```
-logs/
+processes/logs/
   bootstrap_YYYYMMDD.log
 
-artifacts/
+processes/artifacts/
   bootstrap/
     bootstrap_YYYYMMDDTHHMMSSZ.jsonl
 ```
@@ -112,10 +112,10 @@ artifacts/
 1. Cloner le repo
 2. Installer Python 3.11+
 3. `python3 -m venv .venv && source .venv/bin/activate`
-4. `pip install -e ".[dev]"`
+4. `pip install -e "backend/[dev]"`
 5. Installer IB Gateway, activer l'API
 6. `cp .env.example .env` (ajuster le port si TWS)
-7. `python scripts/bootstrap_connectivity.py`
+7. `python processes/scripts/bootstrap_connectivity.py`
 
 ## Dépannage
 

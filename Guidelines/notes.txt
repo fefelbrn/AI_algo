@@ -1,0 +1,1 @@
+Notes 1: foutre R pour blackshole dans le caclul, à 0 au début (laisser changeant). POur chaque maturité, voir le glissement (actuelle vs une dans le passée)

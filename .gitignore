@@ -23,9 +23,11 @@ env/
 *.pem
 *.key
 
-# ── Project artifacts & runtime data ────────────────────
-artifacts/
+# ── Runtime data (processes/) ───────────────────────────
+processes/logs/
+processes/artifacts/
 logs/
+artifacts/
 *.log
 *.db
 *.sqlite
@@ -53,5 +55,7 @@ Thumbs.db
 # ── Cursor ────────────────────────────────────────────
 .cursor/
 
-# ── Course guidelines (local / confidential) ──────────
-guidelines/
+# ── Guidelines (large/local files only) ───────────────
+guidelines/*.pdf
+guidelines/*.HEIC
+guidelines/*.heic

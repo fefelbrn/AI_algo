@@ -9,6 +9,7 @@ from typing import Any
 import yaml
 
 from src.connectivity.secrets import IBKRSecrets
+from src.paths import backend_root, repo_root
 
 
 @dataclass(frozen=True)
@@ -58,10 +59,11 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 def load_config(
     config_path: Path | None = None,
     *,
-    project_root: Path | None = None,
+    repo_root_path: Path | None = None,
+    project_root: Path | None = None,  # alias for repo_root_path (backward compat)
 ) -> AppConfig:
-    root = project_root or Path(__file__).resolve().parents[2]
-    config_path = config_path or root / "configs" / "dev.yaml"
+    root = repo_root_path or project_root or repo_root()
+    config_path = config_path or backend_root() / "configs" / "dev.yaml"
     raw = _load_yaml(config_path)
 
     ibkr_raw = raw.get("ibkr", {})
@@ -79,8 +81,8 @@ def load_config(
             readonly=bool(ibkr_raw.get("readonly", True)),
         ),
         paths=PathsConfig(
-            logs_dir=root / paths_raw.get("logs_dir", "logs"),
-            artifacts_dir=root / paths_raw.get("artifacts_dir", "artifacts"),
+            logs_dir=root / paths_raw.get("logs_dir", "processes/logs"),
+            artifacts_dir=root / paths_raw.get("artifacts_dir", "processes/artifacts"),
         ),
         health=HealthConfig(
             max_clock_skew_seconds=float(health_raw.get("max_clock_skew_seconds", 5.0)),

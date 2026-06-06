@@ -26,19 +26,19 @@ contract = master.resolve_contract(instrument_key, "2026-06-06")
 ```bash
 # IB Gateway must be running (paper, port 4002)
 source .venv/bin/activate
-python scripts/discover_universe.py
+python processes/scripts/discover_universe.py
 ```
 
 Options:
 - `--session-date YYYY-MM-DD` — date de session (défaut: aujourd'hui)
-- `--client-id 2` — client ID dédié au service universe (voir `configs/instruments.yaml`)
+- `--client-id 2` — client ID dédié au service universe (voir `backend/configs/instruments.yaml`)
 
 ## Configuration
 
 | Fichier | Rôle |
 |---------|------|
-| `configs/instruments.yaml` | Liste des underlyings à découvrir |
-| `configs/universe.yaml` | Fenêtre de maturité, batch size, filtres |
+| `backend/configs/instruments.yaml` | Liste des underlyings à découvrir |
+| `backend/configs/universe.yaml` | Fenêtre de maturité, batch size, filtres |
 
 ### Fenêtre de maturité (défaut)
 
@@ -49,7 +49,7 @@ Options:
 ## Stockage
 
 ```
-artifacts/instrument_master/
+processes/artifacts/instrument_master/
   master.db                              # SQLite — tables canoniques
   dt=2026-06-06/
     raw_broker_universe_v0.1.0_xxx.jsonl # Réponses brutes IBKR

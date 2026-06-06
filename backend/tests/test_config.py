@@ -6,11 +6,14 @@ from src.connectivity.config import load_config
 from src.connectivity.secrets import load_secrets
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+from src.paths import backend_root, repo_root
 
 
 def test_load_dev_config():
-    config = load_config(PROJECT_ROOT / "configs" / "dev.yaml", project_root=PROJECT_ROOT)
+    config = load_config(
+        backend_root() / "configs" / "dev.yaml",
+        repo_root_path=repo_root(),
+    )
     assert config.environment == "dev"
     assert config.ibkr.port == 4002
     assert config.bootstrap.smoke_underlying == "SPY"

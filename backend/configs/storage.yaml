@@ -1,0 +1,57 @@
+# Step 4 — persistent storage and data model
+version: "storage_v0.1.0"
+
+schema_version: "1.0.0"
+
+metadata:
+  db_subdir: "metadata"
+  db_filename: "platform.db"
+
+partitioning:
+  # All columnar datasets live under processes/artifacts/{layer}/
+  date_key: "dt"
+  session_key: "session_id"
+  underlying_key: "underlying"
+  product_key: "product"
+
+retention:
+  # Tier labels from roadmap — enforce manually / via future cron
+  raw_market_events:
+    tier: 1
+    retain_days: 90
+    description: "Immutable tick/event evidence"
+  market_state_snapshots:
+    tier: 2
+    retain_days: 365
+  forward_curve:
+    tier: 2
+    retain_days: 365
+  iv_points:
+    tier: 2
+    retain_days: 365
+  surface_parameters:
+    tier: 2
+    retain_days: 365
+  surface_grid:
+    tier: 2
+    retain_days: 365
+  pricing_results:
+    tier: 2
+    retain_days: 365
+  risk_aggregates:
+    tier: 2
+    retain_days: 365
+  scenario_results:
+    tier: 2
+    retain_days: 365
+  qc_results:
+    tier: 3
+    retain_days: 730
+  instrument_master:
+    tier: 2
+    retain_days: 365
+
+schema_evolution:
+  # Category A changes require new schema_version bump
+  allow_extra_columns: false
+  reject_unknown_layers: true

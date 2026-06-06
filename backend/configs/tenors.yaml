@@ -1,0 +1,13 @@
+# Shared tenor definitions — used by collector and future tenor tagger (processes)
+version: "tenors_v0.1.0"
+
+tenors:
+  - { label: "10d",  days: 10 }
+  - { label: "1m",   days: 30 }
+  - { label: "3m",   days: 90 }
+  - { label: "6m",   days: 180 }
+  - { label: "9m",   days: 270 }
+  - { label: "12m",  days: 365 }
+  - { label: "18m",  days: 548 }
+  - { label: "24m",  days: 730 }
+  - { label: "36m",  days: 1095 }

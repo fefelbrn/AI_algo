@@ -11,7 +11,7 @@ from src.universe.models import InstrumentKey, OptionInstrument, UnderlyingInstr
 from src.universe.qc import deduplicate_options, run_universe_qc
 from src.universe.storage import InstrumentMasterStore
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+from src.paths import backend_root, repo_root
 
 
 def _sample_underlying() -> UnderlyingInstrument:
@@ -123,7 +123,7 @@ def test_storage_roundtrip(tmp_path):
 
 
 def test_load_universe_config():
-    cfg = load_universe_config(PROJECT_ROOT / "configs")
+    cfg = load_universe_config(backend_root() / "configs")
     assert cfg.version.startswith("universe_v")
     assert len(cfg.underlyings) >= 1
     assert cfg.discovery.max_maturity_days == 90
