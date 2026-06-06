@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "vol-infra"
 version = "0.1.0"
-description = "IBKR-based volatility infrastructure — Step 1 connectivity foundation"
+description = "IBKR-based volatility infrastructure — Steps 1-2"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -24,6 +24,7 @@ dev = [
 
 [project.scripts]
 vol-bootstrap = "scripts.bootstrap_connectivity:main"
+vol-discover = "scripts.discover_universe:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

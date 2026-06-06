@@ -6,7 +6,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-from ib_insync import IB, Stock
+from ib_insync import IB, Option, Stock
 
 from src.connectivity.config import AppConfig
 from src.connectivity.secrets import IBKRSecrets
@@ -32,6 +32,16 @@ class ResolvedContract:
     currency: str
     con_id: int
     local_symbol: str
+
+
+@dataclass(frozen=True)
+class OptionChainParams:
+    exchange: str
+    underlying_con_id: int
+    trading_class: str
+    multiplier: float
+    expirations: tuple[str, ...]
+    strikes: tuple[float, ...]
 
 
 @dataclass(frozen=True)
@@ -99,13 +109,38 @@ class IBKRAdapter:
         exchange: str,
         currency: str,
         sec_type: str = "STK",
+        *,
+        expiry: str | None = None,
+        strike: float | None = None,
+        right: str | None = None,
+        trading_class: str | None = None,
+        multiplier: float | None = None,
     ) -> ResolvedContract:
-        if sec_type != "STK":
-            raise NotImplementedError(f"Step 1 supports STK only, got {sec_type}")
-        contract = Stock(symbol, exchange, currency)
+        if sec_type == "STK":
+            contract = Stock(symbol, exchange, currency)
+        elif sec_type == "OPT":
+            if not all([expiry, strike is not None, right]):
+                raise ValueError("Option resolution requires expiry, strike, and right")
+            contract = Option(
+                symbol,
+                expiry,
+                float(strike),
+                right,
+                exchange,
+                currency=currency,
+                multiplier=multiplier or 100,
+            )
+            if trading_class:
+                contract.tradingClass = trading_class
+        else:
+            raise NotImplementedError(f"Unsupported sec_type: {sec_type}")
+
         qualified = self._ib.qualifyContracts(contract)
         if not qualified:
-            raise ValueError(f"Could not resolve contract: {symbol} {exchange} {currency}")
+            raise ValueError(
+                f"Could not resolve contract: {symbol} {sec_type} {exchange} "
+                f"expiry={expiry} strike={strike} right={right}"
+            )
         resolved = qualified[0]
         return ResolvedContract(
             symbol=resolved.symbol,
@@ -115,6 +150,55 @@ class IBKRAdapter:
             con_id=resolved.conId,
             local_symbol=resolved.localSymbol or resolved.symbol,
         )
+
+    def request_option_chain_params(
+        self,
+        underlying: ResolvedContract,
+    ) -> list[OptionChainParams]:
+        chains = self._ib.reqSecDefOptParams(
+            underlying.symbol,
+            "",
+            underlying.sec_type,
+            underlying.con_id,
+        )
+        results: list[OptionChainParams] = []
+        for chain in chains:
+            multiplier = float(chain.multiplier) if chain.multiplier else 100.0
+            results.append(
+                OptionChainParams(
+                    exchange=chain.exchange,
+                    underlying_con_id=underlying.con_id,
+                    trading_class=chain.tradingClass,
+                    multiplier=multiplier,
+                    expirations=tuple(sorted(chain.expirations)),
+                    strikes=tuple(sorted(float(s) for s in chain.strikes)),
+                )
+            )
+        return results
+
+    def qualify_options_batch(
+        self,
+        contracts: list[Option],
+    ) -> list[ResolvedContract | None]:
+        if not contracts:
+            return []
+        self._ib.qualifyContracts(*contracts)
+        results: list[ResolvedContract | None] = []
+        for c in contracts:
+            if c.conId:
+                results.append(
+                    ResolvedContract(
+                        symbol=c.symbol,
+                        sec_type=c.secType,
+                        exchange=c.exchange,
+                        currency=c.currency,
+                        con_id=c.conId,
+                        local_symbol=c.localSymbol or c.symbol,
+                    )
+                )
+            else:
+                results.append(None)
+        return results
 
     def request_quote(
         self,

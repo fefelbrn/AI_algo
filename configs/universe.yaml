@@ -1,0 +1,23 @@
+# Step 2 — universe discovery settings
+version: "universe_v0.1.0"
+
+discovery:
+  # Maturity window applied to option expiries (days from session date)
+  min_maturity_days: 1
+  max_maturity_days: 90
+  # Safety cap for dev/paper accounts — set null for no cap
+  max_contracts_per_underlying: 2000
+  qualify_batch_size: 100
+  rights:
+    - C
+    - P
+  # Preferred option exchange when multiple chains returned (null = keep all SMART-routed)
+  preferred_exchange: null
+
+filters:
+  exchanges: []          # empty = no exchange filter
+  sec_types: ["STK"]
+  listing_status: active
+
+storage:
+  subdir: "instrument_master"

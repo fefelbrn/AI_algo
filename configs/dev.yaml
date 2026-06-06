@@ -3,7 +3,7 @@ environment: dev
 ibkr:
   host: "127.0.0.1"
   port: 4002          # IB Gateway paper trading (TWS paper: 7497, live Gateway: 4001)
-  client_id: 10       # bootstrap / smoke-test — see docs/environment.md for convention
+  client_id: 10       # bootstrap / smoke-test — universe service uses client_id 2
   timeout_seconds: 30
   readonly: true      # no orders in Step 1
 

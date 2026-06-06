@@ -1,23 +1,57 @@
-# Python
+# ── Python ──────────────────────────────────────────────
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
 *.egg-info/
 .eggs/
 dist/
 build/
+*.egg
+
+# ── Virtual environments ────────────────────────────────
 .venv/
 venv/
+myenv/
+env/
 .env
 
-# Artifacts & logs
+# ── Secrets (never commit) ────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ── Project artifacts & runtime data ────────────────────
 artifacts/
 logs/
 *.log
+*.db
+*.sqlite
+*.sqlite3
 
-# IDE
+# ── Testing ─────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# ── IDE & editor ──────────────────────────────────────
 .idea/
 .vscode/
-.DS_Store
+*.swp
+*.swo
+*~
 
-# Lock files (optional — keep requirements.txt as source of truth)
-# requirements.lock
+# ── OS ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Cursor ────────────────────────────────────────────
+.cursor/
+
+# ── Course guidelines (local / confidential) ──────────
+guidelines/
