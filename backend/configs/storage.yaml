@@ -1,7 +1,7 @@
 # Step 4 — persistent storage and data model
 version: "storage_v0.1.0"
 
-schema_version: "1.0.0"
+schema_version: "1.2.0"
 
 metadata:
   db_subdir: "metadata"
@@ -24,6 +24,9 @@ retention:
     tier: 2
     retain_days: 365
   forward_curve:
+    tier: 2
+    retain_days: 365
+  forward_diagnostics:
     tier: 2
     retain_days: 365
   iv_points:

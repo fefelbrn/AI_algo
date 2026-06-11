@@ -9,6 +9,7 @@ class DataLayer(str, Enum):
     RAW_MARKET_EVENTS = "raw_market_events"
     MARKET_STATE_SNAPSHOTS = "market_state_snapshots"
     FORWARD_CURVE = "forward_curve"
+    FORWARD_DIAGNOSTICS = "forward_diagnostics"
     IV_POINTS = "iv_points"
     SURFACE_PARAMETERS = "surface_parameters"
     SURFACE_GRID = "surface_grid"

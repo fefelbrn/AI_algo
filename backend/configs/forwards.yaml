@@ -1,0 +1,22 @@
+# Step 6 — forward and implied carry engine
+version: "forwards_v0.1.0"
+
+pricing:
+  risk_free_rate: 0.0          # r = 0 at start (prof note — make configurable later)
+  day_count: 365.0
+
+engine:
+  min_parity_candidates: 1
+  min_candidates_after_qc: 1
+  mad_z_threshold: 3.5
+  max_parity_residual_pct: 5.0   # reject if |F_median - F_i|/F_median > this
+  prefer_future_when_available: true
+  blend_future_parity: false     # if true, average future + parity when both exist
+
+weights:
+  use_inverse_spread: true
+  min_option_mid: 0.01
+
+storage:
+  forward_subdir: "forward_curve"
+  diagnostics_subdir: "forward_diagnostics"

@@ -18,7 +18,7 @@ from src.paths import backend_root
 def test_load_storage_config():
     cfg = load_storage_config(backend_root() / "configs")
     assert cfg.version.startswith("storage_v")
-    assert cfg.schema_version == "1.0.0"
+    assert cfg.schema_version == "1.2.0"
     assert "raw_market_events" in cfg.retention
 
 

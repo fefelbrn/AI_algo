@@ -18,6 +18,8 @@ AI for algo/
 - **Step 2** — Instrument master and universe discovery ✅
 - **Step 3** — Market-data ingestion (Parquet snapshots, option C) ✅
 - **Step 4** — Persistent storage & data model ✅
+- **Step 5** — Spot builder & market-state snapshots ✅
+- **Step 6** — Forward & implied carry engine ✅
 
 ## Démarrage rapide
 
@@ -31,6 +33,8 @@ pip install -e "backend/[dev]"
 python processes/scripts/bootstrap_connectivity.py    # Step 1
 python processes/scripts/discover_universe.py         # Step 2
 python processes/scripts/run_collector.py             # Step 3
+python processes/scripts/build_snapshots.py --trade-date 2026-06-09  # Step 5
+python processes/scripts/build_forwards.py --trade-date 2026-06-09   # Step 6
 pytest backend/tests/ -v
 ```
 

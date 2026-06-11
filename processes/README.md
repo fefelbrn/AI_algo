@@ -8,6 +8,9 @@ Scripts opérationnels, runbooks, logs et artifacts runtime.
 |--------|------|-------------|
 | `scripts/bootstrap_connectivity.py` | 1 | Smoke test IBKR |
 | `scripts/discover_universe.py` | 2 | Découverte instrument master |
+| `scripts/run_collector.py` | 3 | Collector snapshots → Parquet |
+| `scripts/build_snapshots.py` | 5 | Raw events → market-state snapshots |
+| `scripts/build_forwards.py` | 6 | Snapshots → forward curve + carry |
 
 ```bash
 # depuis la racine du repo, venv activé

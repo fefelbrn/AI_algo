@@ -1,6 +1,6 @@
 # Data schemas — Step 4
 
-Platform schema version: **1.0.0**
+Platform schema version: **1.2.0**
 
 Metadata DB: `processes/artifacts/metadata/platform.db`
 
@@ -23,22 +23,19 @@ processes/artifacts/{layer}/dt={YYYY-MM-DD}/[underlying={sym}/][product={name}/]
 | `qc_results` | dt | append |
 | `instrument_master` | SQLite `master.db` | versioned |
 
-## Raw market events (Step 3 — live)
+## Raw market events (Step 3)
 
-| Column | Type | Description |
-|--------|------|-------------|
-| event_id | string | UUID |
-| session_id | string | Collector session |
-| snapshot_ts | string | UTC ISO |
-| instrument_key | string | Canonical key |
-| product_name | string | sp500 / eurostoxx50 |
-| role | string | index / future / option |
-| field_name | string | bid, ask, last… |
-| field_value | float64 | Observed value |
-| receipt_ts | string | When collector received |
-| collector_ts | string | When persisted |
-| tenor_label | string | 10d, 1m… |
-| schema_version | string | Platform version |
+See `RAW_MARKET_EVENTS_SCHEMA` in `backend/src/storage/schemas.py`.
+
+## Market state snapshots (Step 5)
+
+| Column | Description |
+|--------|-------------|
+| reference_price / reference_type | mid, last, carry_forward, missing |
+| spread_pct | (ask-bid)/mid × 100 |
+| quote_age_seconds | snapshot_ts − exchange/receipt ts |
+| flag_stale / flag_fallback | QC flags per roadmap |
+| role / tenor_label | index, future, option + tenor bucket |
 
 ## Derived layers (Steps 5+)
 

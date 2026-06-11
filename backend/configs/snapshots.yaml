@@ -1,0 +1,25 @@
+# Step 5 — market-state snapshot builder
+version: "snapshots_v0.1.0"
+
+builder:
+  # Quote older than this at snapshot_ts is flagged stale
+  max_quote_age_seconds:
+    index: 300
+    future: 300
+    option: 300
+  # Spread above this → do not use mid; try last/fallback
+  max_spread_pct:
+    index: 0.5
+    future: 0.25
+    option: 5.0
+  # Carry-forward reference from last trusted snapshot in same session
+  allow_carry_forward: true
+
+reference_priority:
+  # Order tried when building reference_price
+  - mid
+  - last
+  - carry_forward
+
+storage:
+  subdir: "market_state_snapshots"

@@ -6,7 +6,7 @@ import pyarrow as pa
 
 from src.storage.layers import DataLayer
 
-PLATFORM_SCHEMA_VERSION = "1.0.0"
+PLATFORM_SCHEMA_VERSION = "1.2.0"
 
 # ── Step 3 — raw (live + replay identical) ─────────────────────────────
 RAW_MARKET_EVENTS_SCHEMA = pa.schema(
@@ -36,14 +36,19 @@ MARKET_STATE_SNAPSHOTS_SCHEMA = pa.schema(
         ("snapshot_ts", pa.string()),
         ("instrument_key", pa.string()),
         ("product_name", pa.string()),
+        ("role", pa.string()),
         ("symbol", pa.string()),
         ("sec_type", pa.string()),
+        ("tenor_label", pa.string()),
         ("reference_price", pa.float64()),
         ("reference_type", pa.string()),
         ("bid", pa.float64()),
         ("ask", pa.float64()),
         ("last", pa.float64()),
+        ("spread_pct", pa.float64()),
         ("quote_age_seconds", pa.float64()),
+        ("flag_stale", pa.bool_()),
+        ("flag_fallback", pa.bool_()),
         ("session_id", pa.string()),
         ("source_event_partition", pa.string()),
         ("schema_version", pa.string()),
@@ -62,6 +67,29 @@ FORWARD_CURVE_SCHEMA = pa.schema(
         ("forward_confidence", pa.float64()),
         ("tenor_label", pa.string()),
         ("tenor_distance_days", pa.int64()),
+        ("spot_price", pa.float64()),
+        ("implied_carry_rate", pa.float64()),
+        ("forward_method", pa.string()),
+        ("quality_label", pa.string()),
+        ("source_snapshot_ts", pa.string()),
+        ("schema_version", pa.string()),
+    ]
+)
+
+FORWARD_DIAGNOSTICS_SCHEMA = pa.schema(
+    [
+        ("snapshot_ts", pa.string()),
+        ("product_name", pa.string()),
+        ("tenor_label", pa.string()),
+        ("expiry", pa.string()),
+        ("strike", pa.float64()),
+        ("call_mid", pa.float64()),
+        ("put_mid", pa.float64()),
+        ("forward_estimate", pa.float64()),
+        ("weight", pa.float64()),
+        ("parity_residual", pa.float64()),
+        ("method", pa.string()),
+        ("quality_flag", pa.string()),
         ("source_snapshot_ts", pa.string()),
         ("schema_version", pa.string()),
     ]
@@ -176,6 +204,7 @@ LAYER_SCHEMAS: dict[DataLayer, pa.Schema] = {
     DataLayer.RAW_MARKET_EVENTS: RAW_MARKET_EVENTS_SCHEMA,
     DataLayer.MARKET_STATE_SNAPSHOTS: MARKET_STATE_SNAPSHOTS_SCHEMA,
     DataLayer.FORWARD_CURVE: FORWARD_CURVE_SCHEMA,
+    DataLayer.FORWARD_DIAGNOSTICS: FORWARD_DIAGNOSTICS_SCHEMA,
     DataLayer.IV_POINTS: IV_POINTS_SCHEMA,
     DataLayer.SURFACE_PARAMETERS: SURFACE_PARAMETERS_SCHEMA,
     DataLayer.SURFACE_GRID: SURFACE_GRID_SCHEMA,
